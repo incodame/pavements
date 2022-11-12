@@ -1,0 +1,41 @@
+pavement:
+  name: maven
+  versions: []
+  apps: []
+  graph:
+    file:
+      pom_xml:
+        loc: applfile("pom.xml"), endswith("/pom.xml")
+        doc: "Application or module's pom.xml"
+        params:
+          - parent: param
+          - artifact_id: param
+          - group_id: param
+          - version: param
+    param:
+      parent:
+        loc: xpath(//project/parent)
+        doc: "pom.xml parent"
+        params:
+          - parent_artifact_id: param
+          - parent_group_id: param
+          - parent_version: param
+      artifact_id:
+        loc: xpath(//artifactId(text))
+        doc: "pom.xml artifactId"
+      group_id:
+        loc: xpath(//groupdId(text))
+        doc: "pom.xml groupdId"
+      parent_artifact_id:
+        loc: xpath(//artifactId(text))
+        doc: "pom.xml parent artifactId"
+      parent_group_id:
+        loc: xpath(//groupdId(text))
+        doc: "pom.xml parent groupdId"
+      parent_version:
+        loc: xpath(//version(text))
+        doc: "pom.xml parent version"
+      version:
+        loc: xpath(//project/version(text))
+        doc: "pom.xml version"
+    deployment: []
