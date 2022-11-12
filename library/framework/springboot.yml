@@ -1,0 +1,16 @@
+pavement:
+  name: springboot
+  versions: []
+  apps: []
+  graph:
+    file:
+      application_properties:
+        loc: applfile("src/main/resources/application.properties")
+        doc: "properties for the spring boot application"
+        params:
+          - server_port: param
+    param:
+      server_port:
+        loc: property("server.port")
+        doc: "http port for the web application"
+    deployment: []
