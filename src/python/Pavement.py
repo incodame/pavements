@@ -67,7 +67,7 @@ class Pavement(NamedTuple):
                                         params=parameter.get('params',[])))
             for depl in root['graph'].get('deployment', []):
                 deployment = root['graph']['deployment'][depl]
-                app_deployment = ApplicationDeployment(name=param, 
+                app_deployment = ApplicationDeployment(name=depl, 
                                         modules=[], 
                                         location=None)
                 for modu in deployment:
