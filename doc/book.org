@@ -1,0 +1,77 @@
+* Representation of application or system configuration with the pavements toolkit
+** Subtitle: a solution to incrementally describe complex systems 
+** Introduction - Looking back at how we configure software systems ...
+
+*** information complexity in the software world 
+I have in 2016 worked part of my time as a release manager, with the regular duty of building software artifacts out of
+legacy Java EE Components (web applications, web services, batches).
+
+There were a number of tools which we used to:
+- build and release software, such as Maven, Jenkins and Nexus
+- define clusters and their properties for our applications to be deployed on
+- check or adapt the application configuration, then deploy the software artifacts
+- monitor the deployed applications
+
+Each of these functions implied a lot of user navigation in complex tree structures, file systems or web hierarchies,
+with either an IDE such as Intellij, a directory/web browser, or by using tools like Git or BitBucket.
+
+Facing this complexity of information for software engineers can at times be challenging, given that:
+- our build systems and toolset undergo regular changes
+- navigating the information cannot be easily automated, since the tools are specialized in one problem domain,
+  where navigation is typically only possible “top-down”: open a software project with the IDE, navigate to the
+  appropriate resources, locate the specific parts to be reviewed or amended
+- many applications have to be maintained in parallel in a consistent manner
+- there is a natural tendency to forget actual answers to the question: “where is that stuff actually configured” ?
+
+Searching for specific configuration resources can proove a very time consuming process for humans, specially
+when having to correlate the configuration of one application with some other applications or systems,
+
+*** changing the way we navigate information
+The (link)paragraph tool was conceived out of the need for answers to questions such as:
+“What clusters will be impacted if I change the version of jar files due to a software fix affecting their content ?”
+
+This question implies navigating through many logical relations
+configuration parameter
+    > application file
+        > application archive (jar file)
+            > application
+                > application deployment descriptor
+                    > deployment cluster
+
+As I presented concepts from the (link)paragraph tool the very first time to an audience, I wanted to highlight how software
+projects are typically organized in top -> down fashion as trees, but the above question is best answered by navigating the
+information (relations) bottom -> up.
+
+Automating bottom-up navigation requires a "navigation map" that typically does not exist as independent resource,
+as the logical network of configuration parameters is only present - when properly remembered - into a person's mind,
+or partially encoded into some script logic.
+
+*** pavements to the rescue
+The first versions of paragraph encoded the logical relations defining parameters and their "containers" thanks to prolog
+predicates. This was fine for a start, however during some rewrite the need arose for externalizing these definitions as a
+separate resource: paragraph.yml.
+
+As I used the tool for various projects it became clear that the logical network captured into paragraph.yml was dependent
+on the context in which such investigations were carried out. It was therefore not possible to maintain such a resource
+across various git branches, as little adjustments were needed independently for each context:
+- the size of this resource was not any more manageable
+- parts of the graph it captured were dependent on the versions of described software/systems
+- application configuration can follow certain templates, based on the development framework, build or packaging systems
+  they use, and should be captured only once (DRY principle)
+
+The pavements project aims at defining paragraph.yml as the composition of individual graph parts called .. "pavements".
+
+Each pavement can typically describe the configuration of a single application or system.
+In order to avoid duplication of definitions, a pavement itself can inherit container and parameter definitions
+from templates via a set of tag, e.g.
+
+    - Tag build=maven
+    - Tag framework=springboot
+      
+which considerably simplifies its yaml source. These tag reference templates from the pavements library.
+Template pavements from the pavements library can themselves use tags to inherit content from other templates.
+
+The composed graph can then be described either via a DSL in a pavements.yml file, or interactively via a set of
+(user friendly) builder commands.
+
+

@@ -10,5 +10,6 @@ However this data structure can become overly complex when trying to analyze dep
 - combining fragments of this graph to create a correct representation is subject to some contraints
 
 The goal of this foundation tool is to allow the creation of such a combined graph representation using a 
-user friendly set of incremental commands.
+user friendly set of incremental commands, or a DSL defined in a pavements.yml file.
 
+The framework's user guide and examples is covered in this online [book](https://github.com/incodame/pavements/blob/master/doc/book.org) 
