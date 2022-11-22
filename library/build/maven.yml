@@ -1,6 +1,7 @@
 pavement:
   name: maven
   versions: []
+  tags: []
   apps: []
   graph:
     file:

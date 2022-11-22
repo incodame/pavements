@@ -11,10 +11,10 @@ import array
 
 class Application(NamedTuple):
     name: str
-    build: str
     repositories: array.array
     modules: array.array
     deployments: array.array
+    tags: array.array
     
     def toYaml(self):
         return """

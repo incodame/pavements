@@ -1,6 +1,7 @@
 pavement:
   name: springboot
   versions: []
+  tags: []
   apps: []
   graph:
     file:
