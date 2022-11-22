@@ -16,3 +16,6 @@ class Tag(NamedTuple):
     
     def get_template(self) -> str:
         return PavementsLibrary.find_template(self.genre, self.name, self.version)
+    
+if __name__ == '__main__':
+    assert Tag(genre='build', name='maven', version='3.6') == Tag(genre='build', name='maven', version='3.6')
