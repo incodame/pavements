@@ -10,6 +10,7 @@ import array
 import yaml
 import re
 from Application import Application
+from ParagraphContainer import ParagraphContainer
 from FileContainer import FileContainer
 from ArchiveContainer import ArchiveContainer
 from Parameter import Parameter
@@ -20,12 +21,12 @@ from Tag import Tag
 class Pavement(NamedTuple):
     name: str
     repository: str
-    apps: array.array
-    containers: array.array
-    parameters: array.array
-    deployments: array.array
+    apps: list[Application]
+    containers: list[ParagraphContainer]
+    parameters: list[Parameter]
+    deployments: list[ApplicationDeployment]
     connect: array.array
-    tags: array.array
+    tags: list[Tag]
 
     def load_from(self, file: str):
         """enriches the internal collections with the yaml source content"""
@@ -39,6 +40,7 @@ class Pavement(NamedTuple):
         if root is None:
             root = yaml_fragment.get('paragraph', None)
         if root is not None:
+            Pavement.check_yaml_consistency(root)
             for app in root['apps']:
                 self.apps.append(Application(name=app['name'], 
                                         tags=app.get('tags', []),
@@ -82,7 +84,45 @@ class Pavement(NamedTuple):
             pavement_tags = [ Tag(genre=tn, name=root['tags'][indx][tn], version='') for indx, tn in enumerate(pv_tag_names)]
             self.inherit_from(pavement_tags)
     
-    def inherit_from(self, itags: array.array):
+    @staticmethod
+    def check_yaml_consistency(pavement):
+        """Check for consistency of cross-references in the pavement definition"""
+        try:
+            # Navigate to the 'param' section in the YAML structure
+            params = pavement['graph']['param']
+            param_keys = params.keys()
+            files = pavement['graph']['files']
+
+            # Check each parameter sub param references
+            for key, value in params.items():
+                if 'params' in value:
+                    Pavement.check_sub_param_list(key, value['params'], param_keys)
+
+            # Check files sub param references
+            for key, value in files.items():
+                if 'params' in value:
+                    Pavement.check_sub_param_list(key, value['params'], param_keys)
+
+        except KeyError as e:
+            print("Key error in YAML structure: {e}")
+
+    @staticmethod
+    def check_sub_param_list(key, sub_param_list, param_keys):
+        for sub_param in sub_param_list:
+            #  Extract the referenced param name (e.g. 'version' from 'param(version)')
+            ref_param = Pavement.param_ref(sub_param)
+            if ref_param not in param_keys:
+                print(f"Param Reference error: '{ref_param}' referenced in '{key}' does not exist.")
+
+    @staticmethod
+    def param_ref(sub_param):
+        sub_param_val: str = sub_param.get(list(sub_param.keys())[0])
+        if "param(" in sub_param_val:
+            return sub_param_val.split('(')[-1].strip(')')
+        else:
+            return list(sub_param.keys())[0]             
+
+    def inherit_from(self, itags: list[Tag]):
         """loads content from the templates corresponding to the given tags"""
         for itag in itags:
             if itag not in self.tags:
@@ -92,10 +132,10 @@ class Pavement(NamedTuple):
                     self.tags.append(itag)
     
     @staticmethod
-    def parse_param_loc_expr(loc_expr: str) -> (str, str):
+    def parse_param_loc_expr(loc_expr: str) -> tuple[str, str]:
         """parses a prolog term of the form: <type>(<expression>) """
         match = re.search(r"([^(]+)\(([^)]+)\)", loc_expr)
-        return (match.group(1), match.group(2))
+        return match.group(1), match.group(2)
     
     @staticmethod
     def parameter_type(loc_expr: str) -> str:
@@ -111,6 +151,7 @@ class Pavement(NamedTuple):
 if __name__ == '__main__':
     p = Pavement('test', 'test', [], [], [], [], [], [])
     p.load_from('/Users/tanguyro/Incodame/paragraph/paragraph.yml')
-    p.inherit_from([Tag(genre='framework', name='springboot', version='2.3.0')])
+    p.inherit_from([Tag(genre='framework', name='springboot', version='3.3')])
     p.inherit_from([Tag(genre='build', name='maven', version='')])
+    print(p.to_yaml())
     

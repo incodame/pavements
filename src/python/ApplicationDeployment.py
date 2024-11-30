@@ -7,11 +7,11 @@ Created on Sat Nov  5 20:42:31 2022
 """
 
 from typing import NamedTuple
-import array
+from ModuleDeployment import ModuleDeployment
 
 class ApplicationDeployment(NamedTuple):
     name: str
-    modules: array.array
+    modules: list[ModuleDeployment]
     location: str
     
     def toYaml(self):

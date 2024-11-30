@@ -7,14 +7,16 @@ Created on Sat Nov  5 19:51:22 2022
 """
 
 from typing import NamedTuple
-import array
+from Tag import Tag
+from ApplicationDeployment import ApplicationDeployment
+from ModuleDeployment import ModuleDeployment
 
 class Application(NamedTuple):
     name: str
-    repositories: array.array
-    modules: array.array
-    deployments: array.array
-    tags: array.array
+    repositories: list[str]
+    modules: list[ModuleDeployment]
+    deployments: list[ApplicationDeployment]
+    tags: list[Tag]
     
     def toYaml(self):
         return """

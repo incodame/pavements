@@ -7,12 +7,14 @@ Created on Sat Nov  5 20:42:31 2022
 """
 
 from typing import NamedTuple
-import array
+from FileContainer import FileContainer
+from ArchiveContainer import ArchiveContainer
+
 
 class ModuleDeployment(NamedTuple):
     name: str
-    files: array.array
-    archives: array.array
+    files: list[FileContainer]
+    archives: list[ArchiveContainer]
     
     def toYaml(self):
         return """
