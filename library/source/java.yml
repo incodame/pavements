@@ -1,0 +1,18 @@
+pavement:
+  name: java
+  versions: []
+  tags: []
+  apps: []
+  graph:
+    file:
+      java_source:
+        loc: applfile("*.java")
+        doc: "Application or module's java source"
+        params:
+          - class_annotation: structure
+          - field_definition: structure
+          - field_annotation: structure
+    param:
+      class_annotation:
+        doc: "A class annotation, captured by a DCG"
+        loc: dcg:java_class_annotation(Aname, Aprops)

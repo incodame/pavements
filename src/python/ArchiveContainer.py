@@ -6,9 +6,9 @@ Created on Sat Nov  5 19:58:48 2022
 @author: incodame
 """
 
-from Container import Container
+from ParagraphContainer import ParagraphContainer
 
-class ArchiveContainer(Container):
+class ArchiveContainer(ParagraphContainer):
         
     def toYaml(self):
         return """

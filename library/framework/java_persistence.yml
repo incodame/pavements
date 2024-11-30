@@ -1,0 +1,37 @@
+pavement:
+  name: java_persistence
+  versions: []
+  tags: []
+  apps: []
+  graph:
+    file:
+      jpa_entity:
+        isa: java:java_source
+        doc: "entity java source"
+        params:
+          - jpa_database_table: param
+    param:
+      jpa_database_table:
+        isa: java:class_annotation
+        loc: q(Aname='Table', Aprops)
+        doc: "jpa table annotation"
+        params:
+          - jpa_table
+      jpa_database_column_d:
+        isa: java:field_definition
+        loc: q(Fieldname, Fieldprops)
+        doc: "jpa column definition"
+        params:
+          - jpa_column    
+      jpa_database_column_a:
+        isa: java:field_annotation
+        loc: q(Aname='Column', Aprops)
+        doc: "jpa column annotation"
+        params:
+          - jpa_column
+      jpa_table:
+        loc: q(member(Aprops, 'name'=V1L))
+        doc: "table name"
+      jpa_column:
+        loc: q(member(Aprops, 'name'=V1L)), q(Fieldname=V1L)
+        doc: "column name"

@@ -9,34 +9,49 @@ pavement:
         loc: applfile("pom.xml"), endswith("/pom.xml")
         doc: "Application or module's pom.xml"
         params:
-          - parent: param
+          - parent: structure
+          - dependency: structure
           - artifact_id: param
           - group_id: param
           - version: param
+          - property: structure
+          - build_plugin: structure
+          - profile: structure
+          - module: structure
     param:
       parent:
         loc: xpath(//project/parent)
         doc: "pom.xml parent"
         params:
-          - parent_artifact_id: param
-          - parent_group_id: param
-          - parent_version: param
+          - parent_artifact_id: param(artifact_id)
+          - parent_group_id: param(group_id)
+          - parent_version: param(version)
+      dependency:
+        loc: xpath(//project/dependencies/dependency)
+        doc: "pom.xml dependency"
+        params:
+          - dep_artifact_id: param(artifact_id)
+          - dep_group_id: param(group_id)
+          - dep_version: param(version)
       artifact_id:
         loc: xpath(//artifactId(text))
-        doc: "pom.xml artifactId"
+        doc: "artifactId"
       group_id:
-        loc: xpath(//groupdId(text))
-        doc: "pom.xml groupdId"
-      parent_artifact_id:
-        loc: xpath(//artifactId(text))
-        doc: "pom.xml parent artifactId"
-      parent_group_id:
-        loc: xpath(//groupdId(text))
-        doc: "pom.xml parent groupdId"
-      parent_version:
-        loc: xpath(//version(text))
-        doc: "pom.xml parent version"
+        loc: xpath(//groupId(text))
+        doc: "groupId"
       version:
         loc: xpath(//project/version(text))
-        doc: "pom.xml version"
+        doc: "version"
+      property:
+        loc: xpath(//properties/*)
+        doc: "Custom properties used in the build"
+      build_plugin:
+        loc: xpath(//build/plugins/plugin)
+        doc: "Plugin used in the build lifecycle"
+      profile:
+        loc: xpath(//profiles/profile)
+        doc: "Build profiles for different environments"
+      module:
+        loc: xpath(//modules/module)
+        doc: "Sub module"      
     deployment: []
