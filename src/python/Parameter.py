@@ -7,14 +7,13 @@ Created on Sat Nov  5 20:39:18 2022
 """
 
 from typing import NamedTuple
-import array
 
 class Parameter(NamedTuple):
     name: str
     type: str
     loc: str
     doc: str
-    params: array.array
+    params: list
         
     def toYaml(self):
         return """

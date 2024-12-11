@@ -7,14 +7,14 @@ Created on Sat Nov  5 19:58:48 2022
 """
 
 from typing import NamedTuple
-import array
+from Parameter import Parameter
 
-class Container(NamedTuple):
+class ParagraphContainer(NamedTuple):
     name: str
     type: str
     loc: str
     doc: str
-    params: array.array
+    params: list[Parameter]
         
     def toYaml(self):
         return """

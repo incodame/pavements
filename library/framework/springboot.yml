@@ -1,6 +1,6 @@
 pavement:
   name: springboot
-  versions: []
+  versions: [ '3.3' ]
   tags: []
   apps: []
   graph:
@@ -10,8 +10,44 @@ pavement:
         doc: "properties for the spring boot application"
         params:
           - server_port: param
+          - logging_level: param
+          - logging_path: param
+          - datasource_url: param
+          - datasource_username: param
+          - datasource_password: param
+          - server_context_path: param
+          - management_port: param
+          - spring_jpa_show_sql: param
+          - spring_session_store_type: param
     param:
       server_port:
         loc: property("server.port")
         doc: "http port for the web application"
+      logging_level:
+        loc: property("logging.level")
+        doc: "logging level of the application"
+      logging_path:
+        loc: property("logging.file.path")
+        doc: "path to log files"
+      datasource_url:
+        loc: property("spring.datasource.url")
+        doc: "URL of the database to connect to"
+      datasource_username:
+        loc: property("spring.datasource.username")
+        doc: "username for the database"
+      datasource_password:
+        loc: property("spring.datasource.password")
+        doc: "password for the database"
+      server_context_path:
+        loc: property("server.servlet.context-path")
+        doc: "base URI path for the application"
+      management_port:
+        loc: property("management.server.port")
+        doc: "port for actuator management endpoints"
+      spring_jpa_show_sql:
+        loc: property("spring.jpa.show-sql")
+        doc: "whether to show SQL queries in the log"
+      spring_session_store_type:
+        loc: property("spring.session.store-type")
+        doc: "type of session store"          
     deployment: []
