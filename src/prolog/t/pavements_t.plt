@@ -5,6 +5,6 @@
 :- use_module(paragraph_conf).
 
 test('read graph') :-
-    application(app, 'paragraph', paragraph, [ build(maven) ]).
+    application(app, 'paragraph', paragraph, [ build("prolog") ]).
 
 :- end_tests(paragraph_conf).
