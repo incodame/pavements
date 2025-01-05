@@ -14,7 +14,7 @@ docker run -it --network host -v $(pwd):/opt/pavements swipl
 
 ## start a working session with:
 ```
-?- consult('/opt/paragraph/prolog/paragraph_conf.pl').
+?- consult('/opt/pavements/src/prolog/paragraph_conf.pl').
 ```
 
 ## load and execute a test suite such as doc_t with:
