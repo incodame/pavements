@@ -13,3 +13,6 @@ The goal of this foundation tool is to allow the creation of such a combined gra
 user friendly set of incremental commands, or a DSL defined in a pavements.yml file.
 
 The framework's user guide and examples is covered in this online [book](https://github.com/incodame/pavements/blob/master/doc/book.org) 
+
+# package preparation
+Run python setup.py sdist in the terminal to create the package.

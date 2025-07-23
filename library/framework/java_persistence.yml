@@ -9,26 +9,28 @@ pavement:
         isa: java:java_source
         doc: "entity java source"
         params:
-          - jpa_database_table: param
+          - jpa_database_table: structure
+          - jpa_database_column_d: structure
+          - jpa_database_column_a: structure
     param:
       jpa_database_table:
         isa: java:class_annotation
         loc: q(Aname='Table', Aprops)
         doc: "jpa table annotation"
         params:
-          - jpa_table
+          - jpa_table: param
       jpa_database_column_d:
         isa: java:field_definition
         loc: q(Fieldname, Fieldprops)
         doc: "jpa column definition"
         params:
-          - jpa_column    
+          - jpa_column: param    
       jpa_database_column_a:
         isa: java:field_annotation
         loc: q(Aname='Column', Aprops)
         doc: "jpa column annotation"
         params:
-          - jpa_column
+          - jpa_column: param
       jpa_table:
         loc: q(member(Aprops, 'name'=V1L))
         doc: "table name"
