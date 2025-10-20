@@ -66,6 +66,7 @@ class Pavement(NamedTuple):
                 parameter = root['graph']['param'][param]
                 self.parameters.append(Parameter(name=param, 
                                         type=self.parameter_type(parameter.get('loc', '')),
+                                        isa=parameter.get('isa', ''),
                                         loc=parameter.get('loc', ''),
                                         doc=parameter.get('doc', ''),
                                         params=parameter.get('params',[])))

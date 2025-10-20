@@ -32,8 +32,8 @@ pavement:
         params:
           - jpa_column: param
       jpa_table:
-        loc: q(member(Aprops, 'name'=V1L))
+        loc: aq(member(Aprops, 'name'=V1L))
         doc: "table name"
       jpa_column:
-        loc: q(member(Aprops, 'name'=V1L)), q(Fieldname=V1L)
+        loc: aq(member(Aprops, 'name'=V1L)), aq(Fieldname=V1L)
         doc: "column name"

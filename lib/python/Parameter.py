@@ -11,6 +11,7 @@ from typing import NamedTuple
 class Parameter(NamedTuple):
     name: str
     type: str
+    isa: str
     loc: str
     doc: str
     params: list
