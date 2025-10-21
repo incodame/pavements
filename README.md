@@ -16,3 +16,20 @@ The framework's user guide and examples is covered in this online [book](https:/
 
 # package preparation
 Run python setup.py sdist in the terminal to create the package.
+
+# quick test
+
+```
+export PYTHONPATH=/path/to/pavements/lib/python
+export PAVEMENTS_LIBRARY=/path/to/pavements/library
+python
+>>> from pavements import Pavement 
+>>> p = Pavement('test', 'test', [], [], [], [], [], [])
+>>> p.load_from('/path/to/pavements/yaml/paragraph.yml')
+```
+
+# automated tests
+
+```
+python -m unittest discover -s tests
+```
