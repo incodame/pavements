@@ -29,6 +29,24 @@ class Pavement(NamedTuple):
     connect: array.array
     tags: list[Tag]
 
+    def get_apps(self, tag_list=None):
+        """
+        Returns a generator of Application objects that match the given tags.
+        If no tags are provided, all Application objects are returned.
+        """
+        if not tag_list:  # If tag_list is empty or None, return all apps
+            yield from self.apps
+        else:
+            for app in self.apps:
+                if any(tag in self.tags for tag in tag_list):
+                    yield app
+
+    def get_tags(self):
+        """
+        Returns a generator of all Tag objects.
+        """
+        yield from self.tags
+
     def load_from(self, file: str):
         """enriches the internal collections with the yaml source content"""
         yaml_fragment = ""
