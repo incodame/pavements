@@ -1,19 +1,18 @@
 import unittest
-from unittest.mock import MagicMock
 from pavements import Pavement
 from Tag import Tag
 from Application import Application
 
 class TestPavementGenerators(unittest.TestCase):
     def setUp(self):
-        # Mock Tag objects
+        # Tag objects
         self.tag1 = Tag(name="tag1", genre="genre1", version="1.0")
         self.tag2 = Tag(name="tag2", genre="genre2", version="2.0")
 
-        # Mock Application objects
-        self.app1 = MagicMock(spec=Application, tags=[self.tag1])
-        self.app2 = MagicMock(spec=Application, tags=[self.tag2])
-        self.app3 = MagicMock(spec=Application, tags=[self.tag1, self.tag2])
+        # Application objects
+        self.app1 = Application(name="App1", repositories=[], modules=[], deployments=[], tags=[self.tag1])
+        self.app2 = Application(name="App2", repositories=[], modules=[], deployments=[], tags=[self.tag2])
+        self.app3 = Application(name="App3", repositories=[], modules=[], deployments=[], tags=[self.tag1, self.tag2])
 
         # Create a Pavement instance
         self.pavement = Pavement(

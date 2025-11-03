@@ -38,7 +38,7 @@ class Pavement(NamedTuple):
             yield from self.apps
         else:
             for app in self.apps:
-                if any(tag in self.tags for tag in tag_list):
+                if any(tag in app.tags for tag in tag_list):
                     yield app
 
     def get_tags(self):
