@@ -12,6 +12,8 @@ However this data structure can become overly complex when trying to analyze dep
 The goal of this foundation tool is to allow the creation of such a combined graph representation using a 
 user friendly set of incremental commands, or a DSL defined in a pavements.yml file.
 
+The tool stores the combined graph into a graph database (terminus).
+
 The framework's user guide and examples is covered in this online [book](https://github.com/incodame/pavements/blob/master/doc/book.org) 
 
 # package preparation
@@ -31,5 +33,7 @@ python
 # automated tests
 
 ```
+export PYTHONPATH=/path/to/pavements/lib/python
+export PAVEMENTS_LIBRARY=/path/to/pavements/library
 python -m unittest discover -s tests
 ```
