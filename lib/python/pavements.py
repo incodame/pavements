@@ -47,6 +47,12 @@ class Pavement(NamedTuple):
         """
         yield from self.tags
 
+    def get_parameters(self):
+        """
+        Returns a generator of all Parameter objects.
+        """
+        yield from self.parameters    
+
     def load_from(self, file: str):
         """enriches the internal collections with the yaml source content"""
         yaml_fragment = ""

@@ -2,6 +2,7 @@ import unittest
 from pavements import Pavement
 from Tag import Tag
 from Application import Application
+from Parameter import Parameter
 
 class TestPavementGenerators(unittest.TestCase):
     def setUp(self):
@@ -14,13 +15,17 @@ class TestPavementGenerators(unittest.TestCase):
         self.app2 = Application(name="App2", repositories=[], modules=[], deployments=[], tags=[self.tag2])
         self.app3 = Application(name="App3", repositories=[], modules=[], deployments=[], tags=[self.tag1, self.tag2])
 
+        # Parameter objects
+        self.param1 = Parameter(name="Param1", type="string", isa="", loc="xpath(//'context-root'(text))", doc="", params=[])
+        self.param2 = Parameter(name="Param2", type="int", isa="", loc="xpath(//'port'(text))", doc="", params=[])
+
         # Create a Pavement instance
         self.pavement = Pavement(
             name="TestPavement",
             repository="https://example.com/repo",
             apps=[self.app1, self.app2, self.app3],
             containers=[],
-            parameters=[],
+            parameters=[self.param1, self.param2],
             deployments=[],
             connect=[],
             tags=[self.tag1, self.tag2],
@@ -43,6 +48,11 @@ class TestPavementGenerators(unittest.TestCase):
         # Test get_tags to ensure all tags are returned
         result = list(self.pavement.get_tags())
         self.assertEqual(result, [self.tag1, self.tag2])
+
+    def test_get_parameters(self):
+        # Test get_parameters to ensure it returns an empty list
+        result = list(self.pavement.get_parameters())
+        self.assertEqual(result, [self.param1, self.param2])
 
 if __name__ == "__main__":
     unittest.main()
