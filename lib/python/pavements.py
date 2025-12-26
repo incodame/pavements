@@ -93,6 +93,7 @@ class Pavement(NamedTuple):
                                         isa=parameter.get('isa', ''),
                                         loc=parameter.get('loc', ''),
                                         doc=parameter.get('doc', ''),
+                                        pvt=root['name'],
                                         params=parameter.get('params',[])))
             for depl in root['graph'].get('deployment', []):
                 deployment = root['graph']['deployment'][depl]

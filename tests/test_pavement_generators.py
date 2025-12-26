@@ -16,8 +16,8 @@ class TestPavementGenerators(unittest.TestCase):
         self.app3 = Application(name="App3", repositories=[], modules=[], deployments=[], tags=[self.tag1, self.tag2])
 
         # Parameter objects
-        self.param1 = Parameter(name="Param1", type="string", isa="", loc="xpath(//'context-root'(text))", doc="", params=[])
-        self.param2 = Parameter(name="Param2", type="int", isa="", loc="xpath(//'port'(text))", doc="", params=[])
+        self.param1 = Parameter(name="Param1", type="string", isa="", loc="xpath(//'context-root'(text))", doc="", pvt="jee", params=[])
+        self.param2 = Parameter(name="Param2", type="int", isa="", loc="xpath(//'port'(text))", doc="", pvt="jee", params=[])
 
         # Create a Pavement instance
         self.pavement = Pavement(

@@ -14,6 +14,7 @@ class Parameter(NamedTuple):
     isa: str
     loc: str
     doc: str
+    pvt: str
     params: list
         
     def toYaml(self):
