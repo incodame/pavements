@@ -61,8 +61,11 @@ class Pavement(NamedTuple):
         if root is not None:
             Pavement.check_yaml_consistency(root)
             for app in root['apps']:
+                # todo - read tag version
+                app_tag_names = [ list(tg)[0] for tg in app['tags']]
+                app_tags = [ Tag(genre=tn, name=app['tags'][indx][tn], version='') for indx, tn in enumerate(app_tag_names)]
                 self.apps.append(Application(name=app['name'], 
-                                        tags=app.get('tags', []),
+                                        tags=app_tags,
                                         repositories=app.get('repositories', []),
                                         modules=app.get('modules',[]),
                                         deployments=app.get('deployments',[])))
