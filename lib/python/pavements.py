@@ -47,11 +47,29 @@ class Pavement(NamedTuple):
         """
         yield from self.tags
 
+    def get_containers(self):
+        """
+        Returns a generator of all ParagraphContainer objects.
+        """
+        yield from self.containers
+
+    def get_container(self, name: str):
+        """
+        Returns a specific ParagraphContainer object by name.
+        """
+        return next((cont for cont in self.containers if cont.name == name), None)
+
     def get_parameters(self):
         """
         Returns a generator of all Parameter objects.
         """
-        yield from self.parameters    
+        yield from self.parameters  
+
+    def get_parameter(self, name: str):
+        """
+        Returns a specific Parameter object by name.
+        """
+        return next((param for param in self.parameters if param.name == name), None)      
 
     def load_from(self, file: str):
         """enriches the internal collections with the yaml source content"""
@@ -81,14 +99,14 @@ class Pavement(NamedTuple):
                                         type='file',
                                         loc=container.get('loc', ''),
                                         doc=container.get('doc', ''),
-                                        params=container.get('params',[])))        
+                                        params=[ Pavement.param_ref(sub_param) for sub_param in container.get('params',[]) ] ))       
             for cont in root['graph'].get('archive', []):
                 container = root['graph']['archive'][cont]
                 self.containers.append(ArchiveContainer(name=cont, 
                                         type='archive',
                                         loc=container.get('loc', ''),
                                         doc=container.get('doc', ''),
-                                        params=container.get('params',[])))
+                                        params=[ Pavement.param_ref(sub_param) for sub_param in container.get('params',[]) ] ))
             for param in root['graph'].get('param', []):
                 parameter = root['graph']['param'][param]
                 self.parameters.append(Parameter(name=param, 
@@ -97,7 +115,7 @@ class Pavement(NamedTuple):
                                         loc=parameter.get('loc', ''),
                                         doc=parameter.get('doc', ''),
                                         pvt=root['name'],
-                                        params=parameter.get('params',[])))
+                                        params=[ Pavement.param_ref(sub_param) for sub_param in parameter.get('params',[]) ] ))
             for depl in root['graph'].get('deployment', []):
                 deployment = root['graph']['deployment'][depl]
                 app_deployment = ApplicationDeployment(name=depl, 
