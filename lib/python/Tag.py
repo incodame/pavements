@@ -14,6 +14,14 @@ class Tag(NamedTuple):
     name: str
     version: str
     
+    def __eq__(self, other):
+        return (
+            isinstance(other, Tag)
+            and self.name == other.name
+            and self.genre == other.genre
+            and self.version == other.version
+        )
+    
     def get_template(self) -> str:
         return PavementsLibrary.find_template(self.genre, self.name, self.version)
     

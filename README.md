@@ -7,9 +7,33 @@ https://github.com/incodame/paragraph/blob/master/paragraph.yml
 However this data structure can become overly complex when trying to analyze dependencies across several contexts
 - size is not any more manageable
 - parts of the graph ("fragments", "tiles" or "views") are dependent on the versions of described software/systems
-- combining fragments of this graph to create a correct representation is subject to some contraints
+- combining fragments of this graph to create a correct representation is subject to some constraints
 
 The goal of this foundation tool is to allow the creation of such a combined graph representation using a 
 user friendly set of incremental commands, or a DSL defined in a pavements.yml file.
 
+The tool stores the combined graph into a graph database (terminus).
+
 The framework's user guide and examples is covered in this online [book](https://github.com/incodame/pavements/blob/master/doc/book.org) 
+
+# package preparation
+Run python setup.py sdist in the terminal to create the package.
+
+# quick test
+
+```
+export PYTHONPATH=/path/to/pavements/lib/python
+export PAVEMENTS_LIBRARY=/path/to/pavements/library
+python
+>>> from pavements import Pavement 
+>>> p = Pavement('test', 'test', [], [], [], [], [], [])
+>>> p.load_from('/path/to/pavements/yaml/paragraph.yml')
+```
+
+# automated tests
+
+```
+export PYTHONPATH=/path/to/pavements/lib/python
+export PAVEMENTS_LIBRARY=/path/to/pavements/library
+python -m unittest discover -s tests
+```

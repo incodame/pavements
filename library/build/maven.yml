@@ -40,7 +40,7 @@ pavement:
         loc: xpath(//groupId(text))
         doc: "groupId"
       version:
-        loc: xpath(//project/version(text))
+        loc: xpath(//version(text))
         doc: "version"
       property:
         loc: xpath(//properties/*)

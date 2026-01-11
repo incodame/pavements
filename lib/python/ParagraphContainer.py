@@ -1,23 +1,23 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-Created on Sat Nov  5 20:39:18 2022
+Created on Sat Nov  5 19:58:48 2022
 
 @author: incodame
 """
 
 from typing import NamedTuple
-import array
+from Parameter import Parameter
 
-class Parameter(NamedTuple):
+class ParagraphContainer(NamedTuple):
     name: str
     type: str
     loc: str
     doc: str
-    params: array.array
+    params: list[Parameter]
         
     def toYaml(self):
         return """
-        parameter:
+        container:
             name: $name
         """

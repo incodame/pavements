@@ -1,0 +1,93 @@
+paragraph:
+  name: paragraph
+  versions: []
+  tags:
+    - build: maven
+    - framework: java_persistence
+  apps:
+    - name: paragraph
+      tags:
+        - build: prolog
+      repositories:
+        - paragraph-repo: webrepo
+      deployments:
+        - paragraph-deploy: deployment
+      modules:
+        - paragraph-ui
+        - paragraph-verticles
+        - paragraph_conf
+    - name: paragraph-ui
+      tags:
+        - build: maven
+        - framework: springboot
+    - name: paragraph-verticles
+      tags:
+        - build: maven
+        - framework: vert-x
+    - name: paragraph_conf
+      tags:
+        - build: prolog
+  graph:
+    file:
+      application_xml:
+        loc: rpath("META-INF/application.xml")
+        doc: "The application.xml deployment descriptor contains one module element for each module in the Enterprise Archive file."
+        params:
+          - context_root: param
+      batch_cmd:
+        loc: endswith(".cmd")
+        doc: "Any batch cmd file within an application's zip"
+        params:
+          - batch_java_home: param
+      help_md:
+        loc: applfile("HELP.md")
+        doc: "Help resources"
+        params:
+          - help_url: param
+      js_source:
+        loc: endswith(".js")
+        doc: "Any javascript source in an application's web archive"
+        params:
+          - angular_module: param
+      json_config:
+        loc: endswith(".json")
+        doc: "Any json configuration in an application's web archive"
+        params:
+          - json_ktext: param
+      readme_md:
+        loc: applfile("README.md")
+        doc: "Documentation entry point"
+        params:
+          - doc_url: param
+    param:
+      angular_module:
+        loc: phrase(js_dcg:angular_module_decl(Val))
+        doc: "Declaration of angularjs module"
+      batch_java_home:
+        loc: regexp("^(?<V1L>.*JAVA_HOME=.*)$")
+        doc: "JAVA_HOME definition within a .cmd"
+      context_root:
+        loc: xpath(//'context-root'(text))
+        doc: "context root of a Java EE web application"
+      doc_url:
+        loc: regexp(".book.[(](?<V1L>.*)[)]$")
+        doc: "book resource url"
+      help_url:
+        loc: regexp("[(](?<V1L>.*)[)]$")
+        doc: "help resource url"
+      json_ktext:
+        loc: jsonget('d/_/t')
+        doc: "text extracted from json configuration tree"
+    deployment:
+      paragraph-deploy:
+        paragraph-ui:
+          files:
+            - help_md: file
+            - pom_xml: file
+          archives:
+            - paragraph-ui(-version).war: archive
+        paragraph-verticles:
+          files:
+            - pom_xml: file
+          archives:
+            - paragraph-verticles-(version)-fat.jar: archive

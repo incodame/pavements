@@ -16,3 +16,9 @@ pavement:
       class_annotation:
         doc: "A class annotation, captured by a DCG"
         loc: dcg:java_class_annotation(Aname, Aprops)
+      field_annotation:
+        doc: "A field annotation, captured by a DCG"
+        loc: dcg:java_field_annotation(Aname, Aprops)
+      field_definition:
+        doc: "A field definition, captured by a DCG"
+        loc: dcg:java_field_definition(Fieldname, Fieldprops)

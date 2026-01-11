@@ -6,6 +6,7 @@ Created on Sat Nov  5 17:51:38 2022
 @author: incodame
 """
 from typing import NamedTuple
+import os
 import array
 import yaml
 import re
@@ -28,6 +29,30 @@ class Pavement(NamedTuple):
     connect: array.array
     tags: list[Tag]
 
+    def get_apps(self, tag_list=None):
+        """
+        Returns a generator of Application objects that match the given tags.
+        If no tags are provided, all Application objects are returned.
+        """
+        if not tag_list:  # If tag_list is empty or None, return all apps
+            yield from self.apps
+        else:
+            for app in self.apps:
+                if any(tag in app.tags for tag in tag_list):
+                    yield app
+
+    def get_tags(self):
+        """
+        Returns a generator of all Tag objects.
+        """
+        yield from self.tags
+
+    def get_parameters(self):
+        """
+        Returns a generator of all Parameter objects.
+        """
+        yield from self.parameters    
+
     def load_from(self, file: str):
         """enriches the internal collections with the yaml source content"""
         yaml_fragment = ""
@@ -42,8 +67,11 @@ class Pavement(NamedTuple):
         if root is not None:
             Pavement.check_yaml_consistency(root)
             for app in root['apps']:
+                # todo - read tag version
+                app_tag_names = [ list(tg)[0] for tg in app['tags']]
+                app_tags = [ Tag(genre=tn, name=app['tags'][indx][tn], version='') for indx, tn in enumerate(app_tag_names)]
                 self.apps.append(Application(name=app['name'], 
-                                        tags=app.get('tags', []),
+                                        tags=app_tags,
                                         repositories=app.get('repositories', []),
                                         modules=app.get('modules',[]),
                                         deployments=app.get('deployments',[])))
@@ -65,8 +93,10 @@ class Pavement(NamedTuple):
                 parameter = root['graph']['param'][param]
                 self.parameters.append(Parameter(name=param, 
                                         type=self.parameter_type(parameter.get('loc', '')),
+                                        isa=parameter.get('isa', ''),
                                         loc=parameter.get('loc', ''),
                                         doc=parameter.get('doc', ''),
+                                        pvt=root['name'],
                                         params=parameter.get('params',[])))
             for depl in root['graph'].get('deployment', []):
                 deployment = root['graph']['deployment'][depl]
@@ -91,7 +121,7 @@ class Pavement(NamedTuple):
             # Navigate to the 'param' section in the YAML structure
             params = pavement['graph']['param']
             param_keys = params.keys()
-            files = pavement['graph']['files']
+            files = pavement['graph']['file']
 
             # Check each parameter sub param references
             for key, value in params.items():
@@ -104,18 +134,23 @@ class Pavement(NamedTuple):
                     Pavement.check_sub_param_list(key, value['params'], param_keys)
 
         except KeyError as e:
-            print("Key error in YAML structure: {e}")
+            print(f"Key error in YAML structure: Missing key '{e.args[0]}'")
 
     @staticmethod
     def check_sub_param_list(key, sub_param_list, param_keys):
         for sub_param in sub_param_list:
             #  Extract the referenced param name (e.g. 'version' from 'param(version)')
             ref_param = Pavement.param_ref(sub_param)
+            if ref_param is None:
+                continue  # Skip if the sub_param is not a valid reference
             if ref_param not in param_keys:
                 print(f"Param Reference error: '{ref_param}' referenced in '{key}' does not exist.")
 
     @staticmethod
     def param_ref(sub_param):
+        if not isinstance(sub_param, dict):
+            print(f"Invalid sub_param: Expected a dictionary, got {type(sub_param).__name__}. Value: {sub_param}")
+            return None
         sub_param_val: str = sub_param.get(list(sub_param.keys())[0])
         if "param(" in sub_param_val:
             return sub_param_val.split('(')[-1].strip(')')
@@ -147,11 +182,18 @@ class Pavement(NamedTuple):
         pavement:
             name: $name
         """
-
+    
 if __name__ == '__main__':
+    # Dynamically set PAVEMENTS_LIBRARY based on the project root
+    current_file_path = os.path.abspath(__file__)
+    project_root = os.path.dirname(os.path.dirname(os.path.dirname(current_file_path)))  # Go up 3 levels
+    pavements_library_path = os.path.join(project_root, "library")
+    os.environ["PAVEMENTS_LIBRARY"] = pavements_library_path
+    # Load a sample pavement file and inherit tags
     p = Pavement('test', 'test', [], [], [], [], [], [])
     p.load_from('/Users/tanguyro/Incodame/paragraph/paragraph.yml')
     p.inherit_from([Tag(genre='framework', name='springboot', version='3.3')])
     p.inherit_from([Tag(genre='build', name='maven', version='')])
+    p.inherit_from([Tag(genre='source', name='java', version='')])
+    p.inherit_from([Tag(genre='framework', name='java_persistence', version='')])
     print(p.to_yaml())
-    
