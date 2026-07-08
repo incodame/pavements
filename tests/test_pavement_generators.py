@@ -2,6 +2,7 @@ import unittest
 from pavements import Pavement
 from Tag import Tag
 from Application import Application
+from ParagraphContainer import ParagraphContainer
 from Parameter import Parameter
 
 class TestPavementGenerators(unittest.TestCase):
@@ -15,6 +16,9 @@ class TestPavementGenerators(unittest.TestCase):
         self.app2 = Application(name="App2", repositories=[], modules=[], deployments=[], tags=[self.tag2])
         self.app3 = Application(name="App3", repositories=[], modules=[], deployments=[], tags=[self.tag1, self.tag2])
 
+        # Container objects
+        self.file1 = ParagraphContainer(name="application_xml", type="file", loc="applfile('application.xml')", doc="", params=[ "Param1", "Param2" ])
+
         # Parameter objects
         self.param1 = Parameter(name="Param1", type="string", isa="", loc="xpath(//'context-root'(text))", doc="", pvt="jee", params=[])
         self.param2 = Parameter(name="Param2", type="int", isa="", loc="xpath(//'port'(text))", doc="", pvt="jee", params=[])
@@ -24,7 +28,7 @@ class TestPavementGenerators(unittest.TestCase):
             name="TestPavement",
             repository="https://example.com/repo",
             apps=[self.app1, self.app2, self.app3],
-            containers=[],
+            containers=[self.file1],
             parameters=[self.param1, self.param2],
             deployments=[],
             connect=[],
@@ -50,9 +54,14 @@ class TestPavementGenerators(unittest.TestCase):
         self.assertEqual(result, [self.tag1, self.tag2])
 
     def test_get_parameters(self):
-        # Test get_parameters to ensure it returns an empty list
+        # Test get_parameters to ensure all parameters are returned
         result = list(self.pavement.get_parameters())
         self.assertEqual(result, [self.param1, self.param2])
+
+    def test_get_containers(self):
+        # Test get_containers to ensure all containers are returned
+        result = list(self.pavement.get_containers())
+        self.assertEqual(result, [self.file1])    
 
 if __name__ == "__main__":
     unittest.main()
